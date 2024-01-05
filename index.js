@@ -5,10 +5,10 @@ const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const app = express();
 
 //middleware
+app.use(express.json());
 app.use(cors({
   origin: "https://unknown-client-three.vercel.app/"
 }));
-app.use(express.json());
 
 //port
 const port = 5000;
