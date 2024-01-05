@@ -4,12 +4,14 @@ require("dotenv").config();
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const app = express();
 
+
+const corsOptions = {
+  origin: 'https://unknown-client-xi.vercel.app',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
 //middleware
 app.use(express.json());
-app.use(cors({
-  origin: "https://unknown-client-three.vercel.app/",
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-}));
+app.use(cors(corsOptions));
 
 //port
 const port = 5000;
