@@ -12,12 +12,7 @@ const corsOptions = {
 //middleware
 app.use(express.json());
 app.use(cors(corsOptions));
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'https://unknown-client-xi.vercel.app');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-  next();
-});
+app.options('*', cors(corsOptions));
 
 //port
 const port = 5000;
@@ -40,15 +35,19 @@ async function run() {
     const database = client.db("allProducts").collection("products");
     const orderData = client.db("allProducts").collection("orders");
 
-    app.get("/orders", async (req, res) => {
-      let query = {};
-      if (req.query.email) {
-        query = { email: req.query.email };
+    app.get("/orders", async (req, res, next) => {
+      try {
+        let query = {};
+        if (req.query.email) {
+          query = { email: req.query.email };
+        }
+        const orders = orderData.find(query);
+        const result = await orders.toArray();
+        res.send(result);
+      } catch (error) {
+        next(error); // Pass the error to the default error handler
       }
-      const orders = orderData.find(query);
-      const result = await orders.toArray();
-      res.send(result);
-    });
+   });
 
     app.get("/products", async (req, res) => {
       const products = database.find();
