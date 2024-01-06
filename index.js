@@ -5,14 +5,12 @@ const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const app = express();
 
 
-const corsOptions = {
-  origin: 'https://unknown-client-xi.vercel.app',
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-};
 //middleware
 app.use(express.json());
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+app.use(cors({
+  origin:"*"
+}));
+
 
 //port
 const port = 5000;
